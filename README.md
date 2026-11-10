@@ -10,7 +10,9 @@ visualizes the recorded path as a **heat map** drawn on top of the
 
 <img src="Screenshots/heatmap_output.png" alt="Heat map of tracked locations over central London" width="320" />
 
-Red = most visited, orange = moderately visited, blue = passed through once.
+A simulated walk along the Thames from Westminster to Tower Bridge. Blue dots
+trace the path walked; spots where the user stopped heat up through green and
+orange to red.
 
 ## How it works
 
@@ -19,7 +21,7 @@ Red = most visited, orange = moderately visited, blue = passed through once.
 | Model | `Models/LocationPoint.cs` | One saved GPS reading (SQLite row). |
 | Model | `Models/HeatMapCell.cs` | One grid cell + visit count used to render the heat map. |
 | Data | `Services/DatabaseService.cs` | SQLite (via `sqlite-net-pcl`) CRUD for saved points. |
-| Tracking | `Services/LocationTrackingService.cs` | Requests location permission and polls `Geolocation.Default.GetLocationAsync` every 15 seconds. |
+| Tracking | `Services/LocationTrackingService.cs` | Requests location permission and polls `Geolocation.Default.GetLocationAsync` every 5 seconds. |
 | Rendering | `Services/HeatMapRenderer.cs` | **Extends** the Maps control: buckets points onto a lat/lon grid and draws one semi-transparent, color/size-scaled `Circle` per grid cell — producing the heat map effect. |
 | UI | `MainPage.xaml` / `MainPage.xaml.cs` | Map view + Start/Stop/Clear controls, wires the services together. |
 | Bootstrap | `MauiProgram.cs`, `App.xaml.cs` | Dependency injection setup (`DatabaseService`, `LocationTrackingService`, `MainPage` are all singletons). |
@@ -29,11 +31,12 @@ Red = most visited, orange = moderately visited, blue = passed through once.
 `Microsoft.Maui.Controls.Maps` has no built-in heat map layer, so one is
 built on top of it:
 
-1. Every saved GPS point is snapped onto a ~75-meter grid.
+1. Every saved GPS point is snapped onto a ~33-meter grid, so a route is
+   drawn as a trail of dots.
 2. Points are grouped by grid cell, and the number of points per cell is its
    "heat" (visit count).
 3. One `Circle` map element is drawn per cell. Both its **radius** and its
-   **color** (blue → green → orange → red) scale with the visit count, so
+   **color** (blue → light blue → green → orange → red) scale with the visit count, so
    areas the user passed through once look different from areas they
    lingered in or passed through repeatedly.
 

@@ -1,6 +1,5 @@
 using LocationTrackerMAUI.Models;
 using LocationTrackerMAUI.Services;
-using Microsoft.Maui.Maps;
 
 namespace LocationTrackerMAUI;
 
@@ -43,10 +42,7 @@ public partial class MainPage : ContentPage
         RedrawHeatMap();
         UpdateStatusLabel();
 
-        if (_trackedPoints.Count > 0)
-        {
-            CenterMapOn(_trackedPoints[^1]);
-        }
+        FitMapToRoute();
     }
 
     /// <summary>
@@ -114,7 +110,7 @@ public partial class MainPage : ContentPage
         {
             RedrawHeatMap();
             UpdateStatusLabel();
-            CenterMapOn(e.Point);
+            FitMapToRoute();
         });
     }
 
@@ -122,9 +118,15 @@ public partial class MainPage : ContentPage
 
     private void UpdateStatusLabel() => StatusLabel.Text = $"{_trackedPoints.Count} points saved";
 
-    private void CenterMapOn(LocationPoint point)
+    /// <summary>
+    /// Zooms and pans the map so the whole tracked route is visible.
+    /// </summary>
+    private void FitMapToRoute()
     {
-        var center = new Location(point.Latitude, point.Longitude);
-        LocationMap.MoveToRegion(MapSpan.FromCenterAndRadius(center, Distance.FromMeters(500)));
+        var region = HeatMapRenderer.GetRegionForPoints(_trackedPoints);
+        if (region is not null)
+        {
+            LocationMap.MoveToRegion(region);
+        }
     }
 }

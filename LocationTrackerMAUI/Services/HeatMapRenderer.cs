@@ -24,17 +24,18 @@ namespace LocationTrackerMAUI.Services;
 public static class HeatMapRenderer
 {
     /// <summary>
-    /// Grid resolution in degrees. ~0.0007 degrees of latitude is roughly
-    /// 75 meters, which groups readings from the same stop/area together
-    /// without merging an entire city block into one cell.
+    /// Grid resolution in degrees. ~0.0003 degrees of latitude is roughly
+    /// 33 meters: small enough that a walk or drive is drawn as a trail of
+    /// separate dots, while repeated readings at the same stop still merge
+    /// into one cell and "heat up".
     /// </summary>
-    private const double GridResolutionDegrees = 0.0007;
+    private const double GridResolutionDegrees = 0.0003;
 
     /// <summary>Base radius, in meters, for a cell visited only once.</summary>
-    private const double BaseRadiusMeters = 12;
+    private const double BaseRadiusMeters = 28;
 
     /// <summary>Extra radius, in meters, added per additional visit (capped).</summary>
-    private const double RadiusPerVisitMeters = 6;
+    private const double RadiusPerVisitMeters = 7;
 
     private const int MaxVisitsForScaling = 10;
 
@@ -93,9 +94,9 @@ public static class HeatMapRenderer
         {
             Center = new Location(cell.Latitude, cell.Longitude),
             Radius = Distance.FromMeters(radius),
-            StrokeColor = color,
-            StrokeWidth = 1,
-            FillColor = color.WithAlpha(0.35f)
+            StrokeColor = color.WithAlpha(0.9f),
+            StrokeWidth = 2,
+            FillColor = color.WithAlpha(0.6f)
         };
     }
 
@@ -112,10 +113,38 @@ public static class HeatMapRenderer
 
         return intensity switch
         {
-            < 0.25 => Colors.DeepSkyBlue,
-            < 0.5 => Colors.LimeGreen,
-            < 0.75 => Colors.Orange,
+            < 0.15 => Colors.Blue,
+            < 0.4 => Colors.DeepSkyBlue,
+            < 0.6 => Colors.LimeGreen,
+            < 0.8 => Colors.Orange,
             _ => Colors.Red
         };
+    }
+
+    /// <summary>
+    /// Builds a map region that fits every saved point (plus a small margin),
+    /// so the whole tracked route is visible at once. Returns null when there
+    /// are no points.
+    /// </summary>
+    public static MapSpan? GetRegionForPoints(IReadOnlyCollection<LocationPoint> points)
+    {
+        if (points.Count == 0)
+        {
+            return null;
+        }
+
+        var minLatitude = points.Min(point => point.Latitude);
+        var maxLatitude = points.Max(point => point.Latitude);
+        var minLongitude = points.Min(point => point.Longitude);
+        var maxLongitude = points.Max(point => point.Longitude);
+
+        var center = new Location((minLatitude + maxLatitude) / 2, (minLongitude + maxLongitude) / 2);
+
+        // 30% padding on each axis; never zoom in closer than ~1 km across.
+        const double MinimumSpanDegrees = 0.01;
+        var latitudeSpan = Math.Max((maxLatitude - minLatitude) * 1.3, MinimumSpanDegrees);
+        var longitudeSpan = Math.Max((maxLongitude - minLongitude) * 1.3, MinimumSpanDegrees);
+
+        return new MapSpan(center, latitudeSpan, longitudeSpan);
     }
 }

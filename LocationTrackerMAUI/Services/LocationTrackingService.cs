@@ -20,8 +20,11 @@ public class LocationCapturedEventArgs : EventArgs
 /// </summary>
 public class LocationTrackingService
 {
-    /// <summary>How often a new GPS fix is requested while tracking.</summary>
-    private static readonly TimeSpan PollingInterval = TimeSpan.FromSeconds(15);
+    /// <summary>
+    /// How often a new GPS fix is requested while tracking. 5 seconds gives
+    /// a smooth trail at walking or driving speed.
+    /// </summary>
+    private static readonly TimeSpan PollingInterval = TimeSpan.FromSeconds(5);
 
     private IDispatcherTimer? _timer;
     private bool _isTracking;
