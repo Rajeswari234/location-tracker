@@ -1,0 +1,22 @@
+## .NET / Visual Studio
+bin/
+obj/
+*.user
+*.userosscache
+*.suo
+.vs/
+.vscode/
+.claude/
+*.Backup.tmp
+
+## macOS
+.DS_Store
+
+## Secrets - local Google Maps API key (template: maps_api_key.example.xml)
+**/Platforms/Android/Resources/values/maps_api_key.xml
+
+## MAUI build output
+*.ap_
+*.apk
+*.aab
+*.ipa

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+	<application android:allowBackup="true"
+	             android:icon="@mipmap/appicon"
+	             android:roundIcon="@mipmap/appicon_round"
+	             android:supportsRtl="true">
+
+		<!-- Required by Microsoft.Maui.Controls.Maps to render Google Maps
+		     on Android. The key itself lives in the git-ignored resource file
+		     Resources/values/maps_api_key.xml (template:
+		     Platforms/Android/maps_api_key.example.xml) so it is never
+		     committed to source control. -->
+		<meta-data android:name="com.google.android.geo.API_KEY"
+		           android:value="@string/google_maps_api_key" />
+	</application>
+
+	<!-- Minimum API level this app targets. -->
+	<uses-sdk android:minSdkVersion="21" android:targetSdkVersion="36" />
+
+	<!-- Network access: required to download map tiles. -->
+	<uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+	<!-- Location permissions: required so the app can read the device's
+	     GPS position while tracking is active. -->
+	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+	<!-- Declares that this app relies on the device having a GPS radio,
+	     but does not strictly require it (so it can still install on
+	     devices/emulators that only support network-based location). -->
+	<uses-feature android:name="android.hardware.location.gps" android:required="false" />
+</manifest>

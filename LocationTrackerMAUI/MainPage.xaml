@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:maps="clr-namespace:Microsoft.Maui.Controls.Maps;assembly=Microsoft.Maui.Controls.Maps"
+             x:Class="LocationTrackerMAUI.MainPage"
+             Title="Location Tracker">
+
+    <Grid RowDefinitions="*,Auto" RowSpacing="0">
+
+        <!-- .NET MAUI Maps control. The heat map is drawn on top of it at
+             runtime by HeatMapRenderer, which adds semi-transparent Circle
+             map elements for every grid cell of saved GPS points. -->
+        <maps:Map x:Name="LocationMap"
+                  Grid.Row="0"
+                  IsShowingUser="True"
+                  MapType="Street" />
+
+        <!-- Bottom control bar: start/stop tracking, clear history, and a
+             status label showing how many points have been captured. -->
+        <Grid Grid.Row="1"
+              ColumnDefinitions="*,*,*"
+              Padding="12"
+              ColumnSpacing="10"
+              BackgroundColor="{AppThemeBinding Light=White, Dark=Black}">
+
+            <Button x:Name="StartStopButton"
+                    Grid.Column="0"
+                    Text="Start Tracking"
+                    Clicked="OnStartStopClicked" />
+
+            <Button x:Name="ClearButton"
+                    Grid.Column="1"
+                    Text="Clear History"
+                    Clicked="OnClearClicked" />
+
+            <Label x:Name="StatusLabel"
+                   Grid.Column="2"
+                   VerticalOptions="Center"
+                   HorizontalOptions="End"
+                   FontSize="13"
+                   Text="0 points saved" />
+        </Grid>
+
+    </Grid>
+
+</ContentPage>

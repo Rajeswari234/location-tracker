@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Template for the Google Maps API key.
+     Copy this file to Platforms/Android/Resources/values/maps_api_key.xml and
+     replace the placeholder with a key that has "Maps SDK for Android" enabled
+     (https://console.cloud.google.com/). That copy is git-ignored. -->
+<resources>
+	<string name="google_maps_api_key" translatable="false">YOUR_GOOGLE_MAPS_API_KEY_HERE</string>
+</resources>

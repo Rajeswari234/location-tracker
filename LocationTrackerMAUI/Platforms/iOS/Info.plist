@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>UIDeviceFamily</key>
+	<array>
+		<integer>1</integer>
+		<integer>2</integer>
+	</array>
+	<key>UIRequiredDeviceCapabilities</key>
+	<array>
+		<string>arm64</string>
+		<string>location-services</string>
+		<string>gps</string>
+	</array>
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	<key>XSAppIconAssets</key>
+	<string>Assets.xcassets/appicon.appiconset</string>
+
+	<!-- Required text shown to the user the first time the app asks for
+	     location permission while it is in the foreground. -->
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Location Tracker needs your location to record your path and draw it as a heat map on the map.</string>
+
+	<!-- Only needed if background tracking is enabled later; harmless to
+	     leave declared for forward compatibility. -->
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Location Tracker needs your location to record your path and draw it as a heat map on the map, even when the app is in the background.</string>
+</dict>
+</plist>
